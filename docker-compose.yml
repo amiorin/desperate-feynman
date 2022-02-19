@@ -72,8 +72,7 @@ services:
     volumes:
       - ${PWD}:/desperate-feynman
     ports:
-      - "1443:443"
-      - "18080:8080"
+      - "8080:8080"
     entrypoint: /desperate-feynman/scripts/starburst/run.sh
     networks:
       - om

@@ -18,4 +18,13 @@
 
 set -xe
 
-exec tail --pid $$ -F /var/log/bootstrap.log
+export STARBURST_HOME=$(pwd)
+export SCRIPTS=$(dirname "$0")
+
+if [ ! -e $STARBURST_HOME/.setupDone ]
+then
+  $SCRIPTS/setup.sh
+  touch $STARBURST_HOME/.setupDone
+fi
+
+exec $STARBURST_HOME/bin/launcher run

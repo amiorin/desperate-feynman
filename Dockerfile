@@ -32,3 +32,6 @@ COPY downloads/starburst-enterprise-370-e.0.tar.gz /
 WORKDIR /opt/starburst
 RUN tar zxf /starburst-enterprise-370-e.0.tar.gz --strip 1
 RUN rm /starburst-enterprise-370-e.0.tar.gz
+RUN DEBIAN_FRONTEND="noninteractive"  apt install -y \
+    python3 \
+    python-is-python3

@@ -35,3 +35,20 @@ RUN rm /starburst-enterprise-370-e.0.tar.gz
 RUN DEBIAN_FRONTEND="noninteractive"  apt install -y \
     python3 \
     python-is-python3
+
+FROM jdk AS metadata
+COPY --from=builder /OpenMetadata /OpenMetadata
+WORKDIR /OpenMetadata
+RUN DEBIAN_FRONTEND="noninteractive"  apt install -y \
+    python3 \
+    python3-pip \
+    python-is-python3 \
+    vim
+RUN pip install \
+    datamodel-code-generator
+RUN datamodel-codegen --input catalog-rest-service/src/main/resources/json  --input-file-type jsonschema --output ingestion-core/src/metadata/generated
+RUN sed -i '/openmetadata-ingestion-core/d' ingestion/setup.py
+RUN pip install ./ingestion[trino,singlestore,mysql]
+RUN pip install ./ingestion-core
+RUN rm -rf /OpenMetadata
+WORKDIR /opt/metadata

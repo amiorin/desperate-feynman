@@ -22,6 +22,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_ROOT_HOST: "%"
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
     volumes:
       - ${PWD}/mysql/:/docker-entrypoint-initdb.d/
     ports:
@@ -55,7 +59,8 @@ services:
     ports:
       - "8585:8585"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     volumes:
       - ${PWD}:/desperate-feynman
     entrypoint: /desperate-feynman/scripts/openmetadata/run.sh

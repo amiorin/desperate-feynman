@@ -3,7 +3,7 @@ Try OpenMetadata with Starburst and SingleStore
 
 ```shell
 # Downloads all software
-./get-archive.sh
+./get-archives.sh
 # Build and run all
 docker compose up
 # Enter the metadata cli container

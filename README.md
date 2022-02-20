@@ -11,3 +11,6 @@ docker exec -it metadata bash
 # Import some some metadata from Starburst
 metadata ingest -c /desperate-feynman/scripts/metadata/starburst.json
 ```
+
+## Smoke tests
+WIP

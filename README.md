@@ -1,5 +1,5 @@
 ## Intro
-Try OpenMetadata with Starburst and SingleStore
+Try OpenMetadata with Starburst and MySQL
 
 ```shell
 # Downloads all software

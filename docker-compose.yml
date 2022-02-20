@@ -24,7 +24,7 @@ services:
       MYSQL_ROOT_HOST: "%"
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 20s
+      timeout: 5s
       retries: 10
     volumes:
       - ${PWD}/mysql/:/docker-entrypoint-initdb.d/
@@ -55,6 +55,8 @@ services:
     environment:
       - "ELASTICSEARCH_HOST=elasticsearch.example.com"
       - "MYSQL_HOST=mysql.example.com"
+      - "AIRFLOW_HOST=airflow.example.com"
+      - "SERVER_HOST=openmetadata.example.com"
     container_name: openmetadata
     ports:
       - "8585:8585"
@@ -77,7 +79,7 @@ services:
     volumes:
       - ${PWD}:/desperate-feynman
     ports:
-      - "8080:8080"
+      - "18080:8080"
     entrypoint: /desperate-feynman/scripts/starburst/run.sh
     networks:
       - om
@@ -92,6 +94,24 @@ services:
     volumes:
       - ${PWD}:/desperate-feynman
     entrypoint: /desperate-feynman/scripts/metadata/run.sh
+    networks:
+      - om
+
+  airflow:
+    build:
+      context: .
+      target: airflow
+    image: airflow:latest
+    container_name: airflow
+    hostname: airflow.example.com
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${PWD}:/desperate-feynman
+    entrypoint: /desperate-feynman/scripts/airflow/run.sh
     networks:
       - om
 networks:

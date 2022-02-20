@@ -52,3 +52,34 @@ RUN pip install ./ingestion[trino,singlestore,mysql]
 RUN pip install ./ingestion-core
 RUN rm -rf /OpenMetadata
 WORKDIR /opt/metadata
+
+FROM python:3.9-slim AS airflow
+ENV AIRFLOW_HOME=/opt/airflow
+RUN apt-get update
+RUN apt-get install -y gcc libsasl2-dev curl build-essential libssl-dev libffi-dev librdkafka-dev unixodbc-dev python3.9-dev libevent-dev wget --no-install-recommends
+WORKDIR /ingestion
+RUN wget https://github.com/open-metadata/openmetadata-airflow-apis/releases/download/0.1/openmetadata-airflow-apis-plugin.tar.gz
+RUN tar zxf openmetadata-airflow-apis-plugin.tar.gz
+RUN mkdir /airflow
+RUN mv plugins /airflow
+ENV AIRFLOW_VERSION=2.2.1
+ENV CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-3.9.txt"
+# Add docker provider for the DockerOperator
+RUN pip install "apache-airflow[docker]==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
+COPY --from=builder /OpenMetadata /OpenMetadata
+WORKDIR /OpenMetadata
+RUN pip install datamodel-code-generator
+RUN datamodel-codegen --input catalog-rest-service/src/main/resources/json  --input-file-type jsonschema --output ingestion-core/src/metadata/generated
+RUN sed -i '/openmetadata-ingestion-core/d' ingestion/setup.py
+RUN sed -i '/ibm-db-sa/d' ingestion/setup.py
+RUN pip install ./ingestion[all] openmetadata-airflow-managed-apis
+RUN pip install ./ingestion-core
+RUN airflow db init
+RUN cp -r ingestion/examples/airflow/airflow.cfg /opt/airflow/airflow.cfg
+RUN cp -r /airflow/plugins /opt/airflow/plugins
+RUN cp -r /airflow/plugins/dag_templates /opt/airflow/
+RUN mkdir -p /opt/airflow/dag_generated_configs
+RUN cp -r /airflow/plugins/dag_managed_operators /opt/airflow/
+RUN rm -rf /OpenMetadata
+WORKDIR /opt/airflow
+EXPOSE 8080

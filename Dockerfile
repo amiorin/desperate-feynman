@@ -19,6 +19,8 @@ RUN DEBIAN_FRONTEND="noninteractive"  apt install -y \
     git
 RUN git clone --depth 1 --single-branch --branch desperate-feynman https://github.com/amiorin/OpenMetadata
 WORKDIR /OpenMetadata
+COPY patches /patches
+RUN for patch in `ls -1 /patches | sort`; do git apply /patches/${patch}; done
 RUN --mount=type=cache,target=/root/.m2 mvn clean package -B -DskipTests
 
 FROM jdk AS openmetadata

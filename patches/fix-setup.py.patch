@@ -1,0 +1,20 @@
+diff --git a/ingestion/setup.py b/ingestion/setup.py
+index 2924bf11..02bfdbab 100644
+--- a/ingestion/setup.py
++++ b/ingestion/setup.py
+@@ -23,7 +23,6 @@ def get_long_description():
+ 
+ 
+ base_requirements = {
+-    "openmetadata-ingestion-core==0.8.0",
+     "commonregex",
+     "idna<3,>=2.5",
+     "click>=7.1.1",
+@@ -115,7 +114,6 @@ plugins: Dict[str, Set[str]] = {
+     "okta": {"okta~=2.3.0"},
+     "mlflow": {"mlflow-skinny~=1.22.0"},
+     "sklearn": {"scikit-learn==1.0.2"},
+-    "db2": {"ibm-db-sa==0.3.7"},
+     "clickhouse": {"clickhouse-driver==0.2.3", "clickhouse-sqlalchemy==0.1.8"},
+     "databricks": {"sqlalchemy-databricks==0.1.0"},
+     "singlestore": {"pymysql>=1.0.2"},

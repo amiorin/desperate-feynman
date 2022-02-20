@@ -27,7 +27,7 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - ${PWD}/mysql/:/docker-entrypoint-initdb.d/
+      - ${PWD}/scripts/mysql/:/docker-entrypoint-initdb.d/
     ports:
       - "3306:3306"
     networks:

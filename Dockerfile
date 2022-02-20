@@ -49,7 +49,6 @@ RUN DEBIAN_FRONTEND="noninteractive"  apt install -y \
 RUN pip install \
     datamodel-code-generator
 RUN datamodel-codegen --input catalog-rest-service/src/main/resources/json  --input-file-type jsonschema --output ingestion-core/src/metadata/generated
-RUN sed -i '/openmetadata-ingestion-core/d' ingestion/setup.py
 RUN pip install ./ingestion[trino,singlestore,mysql]
 RUN pip install ./ingestion-core
 RUN rm -rf /OpenMetadata
@@ -72,8 +71,6 @@ COPY --from=builder /OpenMetadata /OpenMetadata
 WORKDIR /OpenMetadata
 RUN pip install datamodel-code-generator
 RUN datamodel-codegen --input catalog-rest-service/src/main/resources/json  --input-file-type jsonschema --output ingestion-core/src/metadata/generated
-RUN sed -i '/openmetadata-ingestion-core/d' ingestion/setup.py
-RUN sed -i '/ibm-db-sa/d' ingestion/setup.py
 RUN pip install ./ingestion[all] openmetadata-airflow-managed-apis
 RUN pip install ./ingestion-core
 RUN airflow db init

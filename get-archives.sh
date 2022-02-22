@@ -47,3 +47,5 @@ downloadIfNotPresent() {
 downloadIfNotPresent downloads starburst-enterprise-370-e.0.tar.gz https://s3.us-east-2.amazonaws.com/software.starburstdata.net/370e/370-e.0
 downloadIfNotPresent downloads trino-cli-370-e.0-executable.jar https://s3.us-east-2.amazonaws.com/software.starburstdata.net/370e/370-e.0
 downloadIfNotPresent downloads trino-jdbc-370-e.0.jar https://s3.us-east-2.amazonaws.com/software.starburstdata.net/370e/370-e.0
+downloadIfNotPresent downloads apache-atlas-2.1.0-sources.tar.gz https://dlcdn.apache.org/atlas/2.1.0
+downloadIfNotPresent downloads apache-atlas-2.2.0-sources.tar.gz https://dlcdn.apache.org/atlas/2.2.0

@@ -82,3 +82,29 @@ RUN cp -r /airflow/plugins/dag_managed_operators /opt/airflow/
 RUN rm -rf /OpenMetadata
 WORKDIR /opt/airflow
 EXPOSE 8080
+
+#FROM jdk AS builder-atlas
+#RUN DEBIAN_FRONTEND="noninteractive"  apt install -y \
+#    maven \
+#    python  \
+#    python3  \
+#    python3-pip
+#COPY downloads/apache-atlas-2.2.0-sources.tar.gz /
+#WORKDIR /atlas
+#RUN tar zxf /apache-atlas-2.2.0-sources.tar.gz --strip 1
+#ENV MAVEN_OPTS "-Xms2g -Xmx2g"
+#RUN --mount=type=cache,target=/root/.m2 mvn clean package -B -DskipTests -DskipDocs -Pdist,embedded-cassandra-solr
+#
+#FROM jdk AS atlas
+#ENV JAVA_HOME=/usr/lib/jvm/zulu11
+#RUN DEBIAN_FRONTEND="noninteractive"  apt install -y \
+#    python \
+#    vim \
+#    screen
+#COPY --from=builder-atlas /atlas/distro/target/apache-atlas-2.2.0-bin.tar.gz /
+#WORKDIR /opt/atlas
+#RUN tar zxf /apache-atlas-2.2.0-bin.tar.gz --strip 1
+#RUN rm /apache-atlas-2.2.0-bin.tar.gz
+#RUN groupadd atlas && \
+#    useradd -g atlas -ms /bin/bash atlas && \
+#    chown -R atlas:atlas /opt/atlas

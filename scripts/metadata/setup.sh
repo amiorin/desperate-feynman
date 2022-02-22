@@ -16,11 +16,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -xe
-
-export METADATA_HOME=$(pwd)
-export SCRIPTS=$(dirname "$0")
-
-$SCRIPTS/setup.sh
-
-exec tail -F /foobar
+cat <<EOF > ${METADATA_HOME}/singlestore.json
+{
+  "source": {
+    "type": "singlestore",
+    "config": {
+      "host_port": "host.docker.internal:13306",
+      "username": "root",
+      "password": "${SINGLE_STORE_PASSWORD}",
+      "database": "information_schema",
+      "service_name": "local_singlestore",
+      "schema_filter_pattern": {
+        "includes": [".*"]
+      }
+    }
+  },
+  "sink": {
+    "type": "metadata-rest",
+    "config": {}
+  },
+  "metadata_server": {
+    "type": "metadata-server",
+    "config": {
+      "api_endpoint": "http://host.docker.internal:8585/api",
+      "auth_provider_type": "no-auth"
+    }
+  }
+}
+EOF
